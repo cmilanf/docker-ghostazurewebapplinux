@@ -18,6 +18,7 @@ if ! [ "$(ls -A $GHOST_CONTENT)" ]; then
 	gosu node knex-migrator-migrate --init --mgpath "$GHOST_INSTALL/current"
 else
 	# Existing setup detected, let's upgrade the database without erasing it
+	echo "migrate-util.bash: Existing setup detected"
 	# gosu node knex-migrator-migrate --mgpath "$GHOST_INSTALL/current"
 fi
 echo "************migration ended***********"
