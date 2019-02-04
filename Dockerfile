@@ -5,6 +5,7 @@ ARG VERSION
 FROM ghost:${VERSION}
 
 ARG VERSION
+ARG DEBIAN_FRONTEND=noninteractive
 
 LABEL title="Ghost for Microsoft Azure App Service Linux - Let's Encrypt enabled" \
   maintainer="Carlos Milán Figueredo" \
@@ -66,14 +67,11 @@ RUN set -ex \
     tee /etc/apt/sources.list.d/azure-cli.list \
   && curl -L https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
   && echo "deb http://ftp.debian.org/debian ${RELEASE}-backports main" | \
-  tee /etc/apt/sources.list.d/${RELEASE}-backports.list \
+    tee /etc/apt/sources.list.d/${RELEASE}-backports.list \
   && apt-get -y --no-install-recommends install apt-transport-https net-tools \
   && apt-get -y update \
-  && apt-get -y upgrade \
   && apt-get -y --no-install-recommends install azure-cli \
   && apt-get -y --no-install-recommends install certbot nginx -t ${RELEASE}-backports \
-  && apt-get -y autoremove \
-  && apt-get -y autoclean \
   && set +ex
 
 # Workaround for issue with Azure database for MySQL - will be removed later
