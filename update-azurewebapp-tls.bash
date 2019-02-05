@@ -18,6 +18,7 @@ if [ -f /home/letsencrypt/live/$WEBAPP_CUSTOM_HOSTNAME/fullchain.pem ]; then
     if [ -f /home/letsencrypt/live/$WEBAPP_CUSTOM_HOSTNAME/fullchain.pfx ] && [ -f /home/letsencrypt/live/passfile.txt ]; then
         echo "Azure SP LOGIN..."
         az login --service-principal -u $AZUREAD_SP_URL -p $AZUREAD_SP_PASSWORD --tenant $AZUREAD_SP_TENANTID
+        az account set -s $SUBSCRIPTION_ID
         echo "Azure certificate UPLOAD..."
         az webapp config ssl upload \
             --certificate-file /home/letsencrypt/live/$WEBAPP_CUSTOM_HOSTNAME/fullchain.pfx \

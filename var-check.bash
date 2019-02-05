@@ -131,5 +131,12 @@ else
     printf "SET to %s\n" "$RESOURCE_GROUP"
     echo -e "export RESOURCE_GROUP=$RESOURCE_GROUP\n" >> /home/bin/var-set.sh
 fi
+printf "SUBSCRIPTION_ID ---> "
+if [ -z ${SUBSCRIPTION_ID+x} ]; then
+    printf "UNSET\n"
+else
+    printf "SET to %s\n" "$SUBSCRIPTION_ID"
+    echo -e "export SUBSCRIPTION_ID=$SUBSCRIPTION_ID\n" >> /home/bin/var-set.sh
+fi
 chmod +x /home/bin/var-set.sh
 printf "######### Environment variable check finished\n"

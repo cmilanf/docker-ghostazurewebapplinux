@@ -272,6 +272,10 @@
               "value": "[parameters('azureAdSpTenantId')]"
             },
             {
+              "name": "SUBSCRIPTION_ID",
+              "value": "[subscription().subscriptionId]"
+            },
+            {
               "name": "LETSENCRYPT_EMAIL",
               "value": "[parameters('letsEncryptEmail')]"
             },

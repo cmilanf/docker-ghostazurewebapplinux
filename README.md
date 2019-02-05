@@ -78,7 +78,8 @@ Follow the next steps:
   * SMTP_USER. Username used in SMTP authentication.
   * SMTP_PASSWORD. Password used in SMTP authentication. WARNING: It will be clearly visible under Azure portal and stored in plain text in the container.
   * LETSENCRYPT_EMAIL. Email used for TLS certificate generation in Let's Encrypt. Expiration notifications will be recieved in this mailbox.
-  * AZUREAD_SP_URL. URL of the Azure AD Service Principal used to upload and bind certificates. This should be created by the Create-AzureADSP script. Ex: http://calnus-beta
+  * AZUREAD_SP_URL. URL of the Azure AD Service Principal used to upload and bind certificates. This should be created by the Create-AzureADSP script. Ex: http://calnus-beta. It also can refer to Azure AD AppId.
   * AZUREAD_SP_PASSWORD. Password of the Azure AD Service Principal.
-  * AZUREAD_SP_TENANTID. Tenant ID of the Azure AD Service Principal
+  * AZUREAD_SP_TENANTID. Tenant ID of the Azure AD Service Principal.
+  * SUBSCRIPTION_ID. The ID of the Azure subscription.
   * HTTP_CUSTOM_ERRORS. Enable NGINX friendly 404 and 50x errors
