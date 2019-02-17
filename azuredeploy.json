@@ -76,23 +76,39 @@
     "dbDTU": {
       "type": "int",
       "allowedValues": [
-          50,
-          100
+          1,
+          2,
+          4,
+          8,
+          16,
+          32
       ],
-      "defaultValue": 50,
+      "defaultValue": 1,
       "metadata": {
-          "description": "Azure database for MySQL pricing tier : 50 DTU , 100 DTU"
+          "description": "Azure database for MySQL vCores"
       }
     },
     "dbSkuName": {
       "type": "string",
       "allowedValues": [
-          "MYSQLB100",
-          "MYSQLB50"
+        "B_Gen5_1",
+        "B_Gen5_2",
+        "GP_Gen5_1",
+        "GP_Gen5_2",
+        "GP_Gen5_4",
+        "GP_Gen5_8",
+        "GP_Gen5_16",
+        "GP_Gen5_32",
+        "MO_Gen5_1",
+        "MO_Gen5_2",
+        "MO_Gen5_4",
+        "MO_Gen5_8",
+        "MO_Gen5_16",
+        "MO_Gen5_32"
       ],
-      "defaultValue": "MYSQLB100",
+      "defaultValue": "B_Gen5_1",
       "metadata": {
-          "description": "Azure database for MySQL sku name : MYSQLB100 (Basic 100 DTU tier) or MYSQLB50 (Basic 50 DTU tier)"
+          "description": "Azure database for MySQL sku name: B(Basic)+Gen5(Generation5)+1(vCPU cores)"
       }
     },
     "dbSkuSizeMB": {
@@ -103,17 +119,26 @@
       ],
       "defaultValue": 51200,
       "metadata": {
-          "description": "Azure database for MySQL Sku Size "
+          "description": "Azure database for MySQL Sku Size"
       }
     },
     "dbSkuTier": {
       "type": "string",
       "allowedValues": [
-          "Basic"
+          "Basic",
+          "GeneralPurpose",
+          "MemoryOptimized"
       ],
       "defaultValue": "Basic",
       "metadata": {
           "description": "Azure database for MySQL pricing tier"
+      }
+    },
+    "dbSkuFamily": {
+      "type": "string",
+      "defaultValue": "Gen5",
+      "metadata": {
+        "description": "Azure database for MySQL SKU family"
       }
     },
     "smtpService": {
@@ -378,7 +403,7 @@
       "kind": "linux"
     },
     {
-      "apiVersion": "2016-02-01-privatepreview",
+      "apiVersion": "2017-12-01",
       "kind": "",
       "location": "[resourceGroup().location]",
       "name": "[parameters('dbHost')]",
@@ -395,14 +420,14 @@
         "tier": "[parameters('dbSkuTier')]",
         "capacity": "[parameters('dbDTU')]",
         "size": "[parameters('dbSkuSizeMB')]",
-        "family": "SkuFamily"
+        "family": "[parameters('dbSkuFamily')]"
       },
       "type": "Microsoft.DBforMySQL/servers",
       "resources": [
         {
           "type": "firewallrules",
           "condition": "[equals(parameters('dbType'),'mysql')]",
-          "apiVersion": "2016-02-01-privatepreview",
+          "apiVersion": "2017-12-01",
           "dependsOn": [
             "[concat('Microsoft.DBforMySQL/servers/', parameters('dbHost'))]"
           ],
@@ -418,7 +443,7 @@
           "name": "[parameters('dbName')]",
           "type": "databases",
           "condition": "[equals(parameters('dbType'),'mysql')]",
-          "apiVersion": "2016-02-01-privatepreview",
+          "apiVersion": "2017-12-01",
           "properties": {
             "charset": "utf8",
             "collation": "utf8_general_ci"
