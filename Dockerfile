@@ -1,7 +1,7 @@
 # For the time being, source Ghost image is based on Debian 9.6 "Stretch"
 # In order to understand this Dockerfile it is mandatory to look also the
-# base one at https://github.com/docker-library/ghost/blob/master/1/debian/Dockerfile
-ARG VERSION
+# base one at https://github.com/docker-library/ghost/blob/master/2/debian/Dockerfile
+ARG VERSION=latest
 FROM ghost:${VERSION}
 
 ARG VERSION
