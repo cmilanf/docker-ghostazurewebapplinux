@@ -45,14 +45,15 @@ LABEL WEBAPP_CUSTOM_HOSTNAME="Custom DNS of your webapp. Ex: beta.calnus.com" \
 # argument, something critical for us :) We force upgrade to 1.4.1 if not already present
 # https://github.com/TryGhost/Ghost-CLI/issues/563
 # GHOST_CLI_VERSION is taken from base image
-RUN if $(dpkg --compare-versions "1.4.1" "gt" "$GHOST_CLI_VERSION"); then npm un -g ghost-cli; npm i -g ghost-cli@1.4.1; fi \
-  && ghost -v
+RUN if $(dpkg --compare-versions "1.4.1" "gt" "$GHOST_CLI_VERSION"); then npm un -g ghost-cli; \
+  npm i -g ghost-cli@1.4.1; fi && ghost -v
 
 # Do not worry about root password being widely known, there will be no external
 # connection to the container. The use of sudo has become mandatory for ghost-cli.
 # Also, I couldn't help but using linuxlogo, just love it.
 RUN apt-get -y update \
-  && apt-get install -y --no-install-recommends lsb-release lsof at openssl openssh-server supervisor cron git nano jq less linuxlogo unzip sudo \
+  && apt-get install -y --no-install-recommends lsb-release lsof at openssl openssh-server \
+    supervisor cron git nano jq less linuxlogo unzip sudo curl \
   && echo "root:Docker!" | chpasswd \
   && echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \
   && echo "30 * * * * /usr/bin/linuxlogo -L 11 -u > /etc/motd" > /etc/cron.d/linuxlogo \
@@ -62,10 +63,12 @@ RUN apt-get -y update \
 # I plan on running Let's Encrypt certbot in the container, so the Azure CLI tool
 # will come handy for updating the TLS certificate.
 RUN set -ex \
+  && apt-get -y --no-install-recommends install ca-certificates apt-transport-https net-tools gnupg \
   && RELEASE=$(lsb_release -cs) \
   && echo "deb [arch=amd64] https://packages.microsoft.com/repos/azure-cli/ ${RELEASE} main" | \
     tee /etc/apt/sources.list.d/azure-cli.list \
-  && curl -L https://packages.microsoft.com/keys/microsoft.asc | apt-key add - \
+  && curl -L https://packages.microsoft.com/keys/microsoft.asc | \
+    gpg --dearmor | sudo tee /etc/apt/trusted.gpg.d/microsoft.asc.gpg > /dev/null \
   && echo "deb http://ftp.debian.org/debian ${RELEASE}-backports main" | \
     tee /etc/apt/sources.list.d/${RELEASE}-backports.list \
   && apt-get -y --no-install-recommends install apt-transport-https net-tools \
