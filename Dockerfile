@@ -52,7 +52,7 @@ RUN if $(dpkg --compare-versions "1.4.1" "gt" "$GHOST_CLI_VERSION"); then npm un
 # connection to the container. The use of sudo has become mandatory for ghost-cli.
 # Also, I couldn't help but using linuxlogo, just love it.
 RUN apt-get -y update \
-  && apt-get install -y --no-install-recommends lsb-release lsof at openssl openssh-server \
+  && apt-get install -y --no-install-recommends lsb-release lsof at openssl \
     supervisor cron git nano jq less linuxlogo unzip sudo curl \
   && echo "root:Docker!" | chpasswd \
   && echo "node ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers \

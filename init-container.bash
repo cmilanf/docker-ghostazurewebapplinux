@@ -4,10 +4,19 @@
 exec &> >(tee -a /home/LogFiles/init-container.log)
 date
 
+# Install of OpenSSH server moved to container initialization to avoid autogerated
+# private keys to be part of the Docker image.
+# Thanks to Markus Dahlmanns for pointing the issue.
+DEBIAN_FRONTEND=noninteractive
+apt-get update && apt-get install -y openssh-server
+ssh-keygen -A
+if [ ! -d "/var/run/sshd" ]; then
+    mkdir -p /var/run/sshd
+fi
+
 # Directory creation must be here rather than in the Dockerfile.
 # This is due to /home being in a CIFS share pointing to Azure Storage,
 # so it only exist AFTER full boot.
-mkdir -v -p /var/run/sshd
 mkdir -v -p /home/LogFiles/letsencrypt
 mkdir -v -p /home/LogFiles/supervisor
 mkdir -v -p /home/letsencrypt/workdir
